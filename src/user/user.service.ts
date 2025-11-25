@@ -40,7 +40,7 @@ export class UserService {
     return registeredUser;
   }
 
-  findAll(): User[] | [] {
+  findAll(): Omit<User, 'password'>[] {
     const omitUsers = this.db.users.map((user) => getOmitObj(user, 'password'));
     return omitUsers;
   }

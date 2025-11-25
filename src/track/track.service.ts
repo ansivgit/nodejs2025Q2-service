@@ -28,7 +28,7 @@ export class TrackService {
     return entity;
   }
 
-  findAll(): Track[] | [] {
+  findAll(): Track[] {
     return this.db.tracks;
   }
 
