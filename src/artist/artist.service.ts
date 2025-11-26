@@ -42,23 +42,9 @@ export class ArtistService {
 
   update(id: string, updateArtistDto: UpdateArtistDto): Artist {
     const entity = this.findOne(id);
+    Object.assign(entity, updateArtistDto);
 
-    const newArtist = {
-      id,
-      name: updateArtistDto?.name || entity.name,
-      grammy:
-        typeof updateArtistDto?.grammy === 'boolean'
-          ? updateArtistDto.grammy
-          : entity.grammy,
-    };
-
-    for (const prop in updateArtistDto) {
-      if (entity[prop] !== newArtist[prop]) {
-        entity[prop] = newArtist[prop];
-      }
-    }
-
-    return newArtist;
+    return entity;
   }
 
   remove(id: string): void {

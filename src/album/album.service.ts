@@ -42,21 +42,9 @@ export class AlbumService {
 
   update(id: string, updateAlbumDto: UpdateAlbumDto): Album {
     const entity = this.findOne(id);
+    Object.assign(entity, updateAlbumDto);
 
-    const newAlbum = {
-      id,
-      name: updateAlbumDto?.name || entity.name,
-      year: updateAlbumDto?.year || entity.year,
-      artistId: updateAlbumDto?.artistId || entity.artistId,
-    };
-
-    for (const prop in updateAlbumDto) {
-      if (entity[prop] !== newAlbum[prop]) {
-        entity[prop] = newAlbum[prop];
-      }
-    }
-
-    return newAlbum;
+    return entity;
   }
 
   remove(id: string): void {
