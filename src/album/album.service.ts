@@ -50,6 +50,12 @@ export class AlbumService {
       artistId: updateAlbumDto?.artistId || entity.artistId,
     };
 
+    for (const prop in updateAlbumDto) {
+      if (entity[prop] !== newAlbum[prop]) {
+        entity[prop] = newAlbum[prop];
+      }
+    }
+
     return newAlbum;
   }
 

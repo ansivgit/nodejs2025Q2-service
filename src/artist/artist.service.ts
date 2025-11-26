@@ -52,6 +52,12 @@ export class ArtistService {
           : entity.grammy,
     };
 
+    for (const prop in updateArtistDto) {
+      if (entity[prop] !== newArtist[prop]) {
+        entity[prop] = newArtist[prop];
+      }
+    }
+
     return newArtist;
   }
 
