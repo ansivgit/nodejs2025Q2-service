@@ -14,6 +14,7 @@ git clone https://github.com/ansivgit/nodejs2025Q2-service.git
 ## Installing NPM modules
 
 ```
+git checkout develop
 npm install
 ```
 
