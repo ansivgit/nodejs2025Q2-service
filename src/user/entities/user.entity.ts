@@ -5,34 +5,39 @@ import {
   IsUUID,
   IsInt,
 } from 'class-validator';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { NewUser } from '../interfaces/user.interface';
 
+@Entity()
 export class User {
+  @PrimaryGeneratedColumn('uuid')
   @IsString()
   @IsUUID()
   @IsNotEmpty()
   readonly id: string;
 
+  @Column()
   @IsString()
   @IsNotEmpty()
   login: string;
 
+  @Column()
   @IsString()
   @IsNotEmpty()
   password: string;
 
+  @Column('int')
   @IsInt()
   @IsOptional()
   version: number;
 
-  @IsInt()
-  @IsOptional()
-  createdAt: number;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: Date;
 
-  @IsInt()
-  @IsOptional()
-  updatedAt: number;
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 
-  constructor(user: User) {
+  constructor(user: NewUser) {
     Object.assign(this, user);
   }
 }
