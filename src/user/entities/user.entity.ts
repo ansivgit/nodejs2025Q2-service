@@ -1,3 +1,4 @@
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import {
   IsNotEmpty,
   IsString,
@@ -5,7 +6,6 @@ import {
   IsUUID,
   IsInt,
 } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { NewUser } from '../interfaces/user.interface';
 
 @Entity()

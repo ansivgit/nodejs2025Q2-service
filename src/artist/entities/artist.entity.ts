@@ -1,3 +1,4 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -6,16 +7,20 @@ import {
   IsUUID,
 } from 'class-validator';
 
+@Entity()
 export class Artist {
+  @PrimaryGeneratedColumn('uuid')
   @IsString()
   @IsUUID()
   @IsNotEmpty()
   readonly id: string;
 
+  @Column()
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  @Column()
   @IsBoolean()
   @IsOptional()
   grammy?: boolean;
