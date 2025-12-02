@@ -11,6 +11,6 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  @NotContains(' ', {message: 'Password cannot contain spaces'})
+  @NotContains(' ', { message: 'Password cannot contain spaces' })
   password: string;
 }
