@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import {
   IsInt,
   IsNotEmpty,
@@ -6,6 +6,8 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
+import { Album } from '../../album/entities/album.entity';
+import { Artist } from '../../artist/entities/artist.entity';
 
 @Entity()
 export class Track {
@@ -20,13 +22,20 @@ export class Track {
   @IsNotEmpty()
   name: string;
 
-  @Column()
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn({ name: 'artistId' })
+  artist?: Artist | null;
+
+  @Column({ type: 'uuid', nullable: true })
   @IsString()
   @IsUUID()
   @IsOptional()
   artistId?: string | null;
 
-  @Column()
+  @ManyToOne(() => Album, { onDelete: 'SET NULL', nullable: true })
+  album?: Album | null;
+
+  @Column({ type: 'uuid', nullable: true })
   @IsString()
   @IsUUID()
   @IsOptional()

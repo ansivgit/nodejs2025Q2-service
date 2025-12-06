@@ -16,10 +16,20 @@ import { getOmitObj } from '../utils';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  private async getEntity(id: string): Promise<User> {
+    const entity: User | null = await this.userRepository.getOne(id);
+
+    if (!entity) {
+      throw new NotFoundException('Person not found');
+    }
+
+    return entity;
+  }
+
   async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     const { login, password } = createUserDto;
-    const userInfo = { id: v4(), version: 1 };
 
+    const userInfo = { id: v4(), version: 1 };
     const entity: User = new User({ login, password, ...userInfo });
 
     const registeredUser: User = await this.userRepository.create(entity);
@@ -33,23 +43,16 @@ export class UserService {
   }
 
   async getOneById(id: string): Promise<Omit<User, 'password'>> {
-    const entity: User | null = await this.userRepository.getOne(id);
-
-    if (!entity) {
-      throw new NotFoundException('Person not found');
-    }
+    const entity: User = await this.getEntity(id);
 
     const omitEntity: Omit<User, 'password'> = getOmitObj(entity, 'password');
     return omitEntity;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<Omit<User, 'password'>> {
-    const entity: User | null = await this.userRepository.getOne(id);
     const { oldPassword, newPassword } = updateUserDto;
 
-    if (!entity) {
-      throw new NotFoundException('Person not found');
-    }
+    const entity: User = await this.getEntity(id);
 
     if (entity.password !== oldPassword) {
       throw new ForbiddenException('Incorrect password');
@@ -62,15 +65,11 @@ export class UserService {
     await this.userRepository.update(entity);
 
     const omitEntity: Omit<User, 'password'> = getOmitObj(entity, 'password');
-    return entity;
+    return omitEntity;
   }
 
   async remove(id: string): Promise<void> {
-    const entity: User | null = await this.userRepository.getOne(id);
-
-    if (!entity) {
-      throw new NotFoundException('Person not found');
-    }
+    await this.getEntity(id);
 
     await this.userRepository.remove(id);
     console.info(`This action removes a #${id} user`);
