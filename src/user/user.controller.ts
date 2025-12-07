@@ -22,7 +22,9 @@ export class UserController {
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
-  async create(@Body() createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     return await this.userService.create(createUserDto);
   }
 
@@ -32,7 +34,9 @@ export class UserController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Omit<User, 'password'>> {
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Omit<User, 'password'>> {
     return await this.userService.getOneById(id);
   }
 

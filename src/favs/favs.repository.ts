@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -32,7 +32,7 @@ export class FavsRepository {
   async add(favsType: keyof Omit<Favs, 'id'>, entity): Promise<Favs> {
     const favs: Favs = await this.getOrCreateFavs();
 
-    favs[favsType].push(entity);
+    favs[favsType]?.push(entity);
     await this.favsTable.save(favs);
 
     return favs;

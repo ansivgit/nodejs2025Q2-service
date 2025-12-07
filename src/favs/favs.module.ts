@@ -17,9 +17,8 @@ import { TrackModule } from '../track/track.module';
     ArtistModule,
     TrackModule,
   ],
-  controllers: [ FavsController ],
-  providers: [ FavsRepository, FavsService ],
-  exports: [ FavsService ],
+  controllers: [FavsController],
+  providers: [FavsRepository, FavsService],
+  exports: [FavsService],
 })
-
 export class FavsModule {}

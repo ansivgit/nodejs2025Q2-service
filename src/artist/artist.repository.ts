@@ -26,10 +26,7 @@ export class ArtistRepository {
   async update(updatedData: Artist): Promise<void> {
     const { id, name, grammy } = updatedData;
 
-    await this.artistTable.update(
-      { id: id },
-      { name, grammy },
-    );
+    await this.artistTable.update({ id: id }, { name, grammy });
   }
 
   async remove(id: string): Promise<void> {

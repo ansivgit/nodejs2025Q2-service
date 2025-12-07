@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import { User } from './src/user/entities/user.entity';
 import 'dotenv/config';
 
 export const AppDataSource = new DataSource({
@@ -9,8 +8,16 @@ export const AppDataSource = new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  entities: [User],
-  // migrations: ['src/migrations/*.ts'],
   synchronize: true,
-  // synchronize: false,
+  // synchronize: process.env.NODE_ENV === 'development',
+  entities: [
+    process.env.NODE_ENV === 'development'
+      ? './src/**/entities/*.entity.ts'
+      : './dist/**/entities/*.entity.js',
+  ],
+  migrations: [
+    process.env.NODE_ENV === 'development'
+      ? './src/migrations/*.ts'
+      : './dist/migrations/*.js',
+  ],
 });

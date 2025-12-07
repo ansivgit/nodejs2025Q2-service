@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 
-import { AppDataSource } from '../typeorm.config';
 import { AlbumModule } from './album/album.module';
 import { ArtistModule } from './artist/artist.module';
 import { FavsModule } from './favs/favs.module';
@@ -20,9 +19,6 @@ import { UserModule } from './user/user.module';
       database: process.env.POSTGRES_DB,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: process.env.NODE_ENV === 'development',
-      // logging: ['query', 'error'], //! SQL logs
-      // logger: 'advanced-console',
-      // maxQueryExecutionTime: 1000,
     }),
     AlbumModule,
     ArtistModule,
@@ -33,5 +29,4 @@ import { UserModule } from './user/user.module';
   controllers: [],
   providers: [],
 })
-
 export class AppModule {}

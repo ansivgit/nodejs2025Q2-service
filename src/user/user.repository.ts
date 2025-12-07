@@ -26,10 +26,7 @@ export class UserRepository {
   async update(updatedData: User): Promise<void> {
     const { id, password, version, updatedAt } = updatedData;
 
-    await this.userTable.update(
-      { id: id },
-      { password, version, updatedAt },
-    );
+    await this.userTable.update({ id: id }, { password, version, updatedAt });
   }
 
   async remove(id: string): Promise<void> {

@@ -39,7 +39,7 @@ export class UserService {
 
   async getAll(): Promise<Omit<User, 'password'>[]> {
     const users = await this.userRepository.getAll();
-    return users.map(({ password, ...rest }) => rest);
+    return users.map((user) => getOmitObj(user, 'password'));
   }
 
   async getOneById(id: string): Promise<Omit<User, 'password'>> {
@@ -49,7 +49,10 @@ export class UserService {
     return omitEntity;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<Omit<User, 'password'>> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Omit<User, 'password'>> {
     const { oldPassword, newPassword } = updateUserDto;
 
     const entity: User = await this.getEntity(id);
