@@ -10,7 +10,9 @@ import { UserRepository } from './user.repository';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { getOmitObj } from '../utils';
+import { serializeUser } from '../utils';
+
+import type { UserResponse } from './interfaces/user.interface';
 
 @Injectable()
 export class UserService {
@@ -26,7 +28,9 @@ export class UserService {
     return entity;
   }
 
-  async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
+  async create(
+    createUserDto: CreateUserDto,
+  ): Promise<Omit<UserResponse, 'password'>> {
     const { login, password } = createUserDto;
 
     const userInfo = { id: v4(), version: 1 };
@@ -34,25 +38,23 @@ export class UserService {
 
     const registeredUser: User = await this.userRepository.create(entity);
 
-    return getOmitObj(registeredUser, 'password');
+    return serializeUser(registeredUser);
   }
 
-  async getAll(): Promise<Omit<User, 'password'>[]> {
+  async getAll(): Promise<Omit<UserResponse, 'password'>[]> {
     const users = await this.userRepository.getAll();
-    return users.map((user) => getOmitObj(user, 'password'));
+    return users.map((user) => serializeUser(user));
   }
 
-  async getOneById(id: string): Promise<Omit<User, 'password'>> {
+  async getOneById(id: string): Promise<Omit<UserResponse, 'password'>> {
     const entity: User = await this.getEntity(id);
-
-    const omitEntity: Omit<User, 'password'> = getOmitObj(entity, 'password');
-    return omitEntity;
+    return serializeUser(entity);
   }
 
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
-  ): Promise<Omit<User, 'password'>> {
+  ): Promise<Omit<UserResponse, 'password'>> {
     const { oldPassword, newPassword } = updateUserDto;
 
     const entity: User = await this.getEntity(id);
@@ -67,8 +69,7 @@ export class UserService {
 
     await this.userRepository.update(entity);
 
-    const omitEntity: Omit<User, 'password'> = getOmitObj(entity, 'password');
-    return omitEntity;
+    return serializeUser(entity);
   }
 
   async remove(id: string): Promise<void> {

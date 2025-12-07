@@ -14,7 +14,8 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+
+import type { UserResponse } from './interfaces/user.interface';
 
 @Controller('user')
 export class UserController {
@@ -24,19 +25,19 @@ export class UserController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async create(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<Omit<User, 'password'>> {
+  ): Promise<Omit<UserResponse, 'password'>> {
     return await this.userService.create(createUserDto);
   }
 
   @Get()
-  async findAll(): Promise<Omit<User, 'password'>[]> {
+  async findAll(): Promise<Omit<UserResponse, 'password'>[]> {
     return await this.userService.getAll();
   }
 
   @Get(':id')
   async findOne(
     @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<Omit<User, 'password'>> {
+  ): Promise<Omit<UserResponse, 'password'>> {
     return await this.userService.getOneById(id);
   }
 
@@ -45,7 +46,7 @@ export class UserController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<Omit<User, 'password'>> {
+  ): Promise<Omit<UserResponse, 'password'>> {
     return await this.userService.update(id, updateUserDto);
   }
 
