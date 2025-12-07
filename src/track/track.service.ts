@@ -3,17 +3,13 @@ import { v4 } from 'uuid';
 
 import { Track } from './entities/track.entity';
 import { TrackRepository } from './track.repository';
-// import { FavsService } from 'src/favs/favs.service';
 
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 
 @Injectable()
 export class TrackService {
-  constructor(
-    private readonly trackRepository: TrackRepository,
-    // private readonly favsService: FavsService,
-  ) {}
+  constructor(private readonly trackRepository: TrackRepository) {}
 
   private async getEntity(id: string): Promise<Track> {
     const entity: Track | null = await this.trackRepository.getOne(id);
@@ -62,13 +58,5 @@ export class TrackService {
 
     await this.trackRepository.remove(id);
     console.log(`This action removes a #${id} track`);
-
-    // const entityIndex = this.db.tracks.findIndex(
-    //   (item) => item.id === entity.id,
-    // );
-
-    // this.db.tracks.splice(entityIndex, 1);
-
-    // this.favsService.removeTrack(id);
   }
 }

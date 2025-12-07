@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Favs } from './entities//favs.entity';
+import { Favs } from './entities/favs.entity';
 import { FavsController } from './favs.controller';
 import { FavsRepository } from './favs.repository';
 import { FavsService } from './favs.service';

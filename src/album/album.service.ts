@@ -3,17 +3,13 @@ import { v4 } from 'uuid';
 
 import { Album } from './entities/album.entity';
 import { AlbumRepository } from './album.repository';
-// import { FavsService } from 'src/favs/favs.service';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 
 @Injectable()
 export class AlbumService {
-  constructor(
-    private readonly albumRepository: AlbumRepository,
-    // private readonly favsService: FavsService,
-  ) {}
+  constructor(private readonly albumRepository: AlbumRepository) {}
 
   private async getEntity(id: string): Promise<Album> {
     const entity: Album | null = await this.albumRepository.getOne(id);
@@ -58,18 +54,5 @@ export class AlbumService {
 
     await this.albumRepository.remove(id);
     console.log(`This action removes a #${id} album`);
-
-    // const entityIndex = this.db.albums.findIndex(
-    //   (item) => item.id === entity.id,
-    // );
-
-    // this.db.albums.splice(entityIndex, 1);
-
-    // const albumTracks = this.db.tracks.filter(
-    //   (track) => track.albumId === entity.id,
-    // );
-    // albumTracks.forEach((track) => (track.albumId = null));
-
-    // this.favsService.removeAlbum(id);
   }
 }

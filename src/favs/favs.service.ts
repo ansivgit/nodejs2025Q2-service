@@ -1,82 +1,65 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 
-import { DataBase } from 'src/db/db';
 import { Album } from 'src/album/entities/album.entity';
 import { Artist } from 'src/artist/entities/artist.entity';
-import { Track } from 'src/track/entities/track.entity';
-
+import { Track } from '../track/entities/track.entity';
 import { Favs } from './entities/favs.entity';
+
+import { AlbumRepository } from '../album/album.repository';
+import { ArtistRepository } from '../artist/artist.repository';
+import { TrackRepository } from '../track/track.repository';
+import { FavsRepository } from './favs.repository';
 
 @Injectable()
 export class FavsService {
-  constructor(private readonly db: DataBase) {}
+  constructor(
+    private readonly favsRepository: FavsRepository,
+    private albumRepository: AlbumRepository,
+    private artistRepository: ArtistRepository,
+    private trackRepository: TrackRepository,
+  ) {}
 
-  findAll(): Favs {
-    const albums: Album[] = this.db.favs.albums;
-    const artists: Artist[] = this.db.favs.artists;
-    const tracks: Track[] = this.db.favs.tracks;
-
-    const res: Favs = { artists, albums, tracks };
-
-    return res;
+  async getAll(): Promise<Favs> {
+    return await this.favsRepository.getAll();
   }
 
-  createAlbum(id: string): Album {
-    const album: Album | undefined = this.db.albums.find(
-      (entity) => entity.id === id,
-    );
+  async addToFavs(favsType: keyof Omit<Favs, 'id'>, id: string): Promise<Favs> {
+    let entity: Album | Artist | Track | null = null;
 
-    if (!album) {
+    switch (favsType) {
+      case 'albums':
+        entity = await this.albumRepository.getOne(id);
+        break;
+      case 'artists':
+        entity = await this.artistRepository.getOne(id);
+        break;
+      case 'tracks':
+        entity = await this.trackRepository.getOne(id);
+        break;
+      default:
+        console.error('Invalid favsType');
+        entity = null;
+    }
+
+    if (!entity) {
       throw new UnprocessableEntityException("Item doesn't exist");
     }
 
-    this.db.favs.albums.push(album);
-    return album;
+    await this.favsRepository.add(favsType, entity);
+    return await this.getAll();
   }
 
-  removeAlbum(id: string): void {
-    const entityIndex = this.db.favs.albums.findIndex((item) => item.id === id);
+  async removeFromFavs<K extends keyof Omit<Favs, 'id'>>(
+    favsType: K,
+    id: string,
+  ): Promise<void> {
+    const favs: Favs = await this.favsRepository.getAll();
 
-    this.db.favs.albums.splice(entityIndex, 1);
-  }
-
-  createArtist(id: string): Artist {
-    const artist: Artist | undefined = this.db.artists.find(
-      (entity) => entity.id === id,
+    const newFavsArr = favs[favsType].filter(
+      (ent: Album | Artist | Track) => ent.id !== id,
     );
+    favs[favsType] = newFavsArr as Favs[K];
 
-    if (!artist) {
-      throw new UnprocessableEntityException("Artist doesn't exist");
-    }
-
-    this.db.favs.artists.push(artist);
-    return artist;
-  }
-
-  removeArtist(id: string): void {
-    const entityIndex = this.db.favs.artists.findIndex(
-      (item) => item.id === id,
-    );
-
-    this.db.favs.artists.splice(entityIndex, 1);
-  }
-
-  createTrack(id: string): Track {
-    const track: Track | undefined = this.db.tracks.find(
-      (entity) => entity.id === id,
-    );
-
-    if (!track) {
-      throw new UnprocessableEntityException("Item doesn't exist");
-    }
-
-    this.db.favs.tracks.push(track);
-    return track;
-  }
-
-  removeTrack(id: string): void {
-    const entityIndex = this.db.favs.tracks.findIndex((item) => item.id === id);
-
-    this.db.favs.tracks.splice(entityIndex, 1);
+    await this.favsRepository.update(favs);
   }
 }
