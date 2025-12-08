@@ -1,26 +1,26 @@
 # ---- Build stage ----
-FROM node:22-alpine AS builder
+# FROM node:22-alpine AS builder
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+# COPY package.json package-lock.json* ./
+# RUN npm ci
 
-COPY . .
-RUN npm run build
+# COPY . .
+# RUN npm run build
 
-# ---- Prod stage ----
-FROM node:22-alpine AS runner
+# # ---- Prod stage ----
+# FROM node:22-alpine AS runner
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev && npm cache clean --force
+# COPY package.json package-lock.json* ./
+# RUN npm ci --omit=dev && npm cache clean --force
 
-COPY --from=builder /usr/src/app/dist ./dist
+# COPY --from=builder /usr/src/app/dist ./dist
 
-USER node
+# USER node
 
-EXPOSE 4000
+# EXPOSE 4000
 
-CMD ["node", "dist/main.js"]
+# CMD ["node", "dist/main.js"]

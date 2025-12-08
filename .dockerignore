@@ -1,50 +1,50 @@
-# Node
-node_modules
-npm-debug.log
-yarn-error.log
-pnpm-debug.log
+# # Node
+# node_modules
+# npm-debug.log
+# yarn-error.log
+# pnpm-debug.log
 
-# Builds
-# dist
-coverage
+# # Builds
+# # dist
+# coverage
 
-# Source control
-.git
-.gitignore
+# # Source control
+# .git
+# .gitignore
 
-# Docker junk
-Dockerfile*
-docker-compose*
-.dockerignore
+# # Docker junk
+# Dockerfile*
+# docker-compose*
+# .dockerignore
 
-# Tests
-test
-tests
-__tests__
-*.spec.ts
-*.e2e-spec.ts
-vitest.config.*
-jest.config.*
+# # Tests
+# test
+# tests
+# __tests__
+# *.spec.ts
+# *.e2e-spec.ts
+# vitest.config.*
+# jest.config.*
 
-# Environment
-.env
-.env.*
+# # Environment
+# .env
+# .env.*
 
+# # logs
 # logs
-logs
-*.log
+# *.log
 
-# OS
-Thumbs.db
+# # OS
+# Thumbs.db
 
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
+# # IDE
+# .vscode
+# .idea
+# *.swp
+# *.swo
 
-# temporary files
-tmp
-temp
+# # temporary files
+# tmp
+# temp
 
 
