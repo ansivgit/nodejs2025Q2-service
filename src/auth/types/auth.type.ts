@@ -3,9 +3,10 @@ export type TokenResponse = {
   refresh_token: string;
   token_type: string;
   expires_in: number; // expires in seconds
+  // user: UserTokenPayload;
 };
 
 export type UserTokenPayload = {
-  sub: string;
+  userId: string;
   login: string;
 };
