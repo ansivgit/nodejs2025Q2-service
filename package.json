@@ -27,7 +27,6 @@
     "typeorm:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate src/migrations/migration -d ./typeorm.config.ts",
     "typeorm:run": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./typeorm.config.ts",
     "typeorm:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -d ./typeorm.config.ts",
-
     "docker:build": "docker build -t ansiv/myapp:latest .",
     "docker:up": "docker compose up --build"
   },
