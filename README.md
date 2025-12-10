@@ -31,6 +31,11 @@ docker build -t ansiv/myapp:latest .
 docker compose up --build
 ```
 
+## Scan docker image
+```
+docker scan ansiv/myapp:latest
+```
+
 ## Installing NPM modules
 
 ```
