@@ -1,5 +1,5 @@
 import { User } from 'src/user/entities/user.entity';
-import type { UserResponse } from 'src/user/interfaces/user.interface';
+import type { UserResponse } from 'src/user/types/user.type';
 
 export const serializeUser = (user: User): Omit<UserResponse, 'password'> => {
   return {

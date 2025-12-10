@@ -12,7 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { serializeUser } from '../utils';
 
-import type { UserResponse } from './interfaces/user.interface';
+import type { UserResponse } from './types/user.type';
 
 @Injectable()
 export class UserService {

@@ -15,7 +15,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import type { UserResponse } from './interfaces/user.interface';
+import type { UserResponse } from './types/user.type';
 
 @Controller('user')
 export class UserController {

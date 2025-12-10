@@ -12,7 +12,7 @@ import {
   IsUUID,
   IsInt,
 } from 'class-validator';
-import { NewUser } from '../interfaces/user.interface';
+import { NewUser } from '../types/user.type';
 
 @Entity()
 export class User {
