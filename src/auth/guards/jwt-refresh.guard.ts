@@ -4,12 +4,16 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import type { JwtPayload } from 'jsonwebtoken';
 import { AuthService } from '../auth.service';
-import type { UserTokenPayload } from '../types/auth.type';
 
 @Injectable()
 export class JwtRefreshGuard implements CanActivate {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private jwtService: JwtService,
+    private readonly authService: AuthService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
@@ -20,17 +24,21 @@ export class JwtRefreshGuard implements CanActivate {
     }
 
     try {
-      const payload: UserTokenPayload =
-        await this.authService.verifyRefreshToken(token);
+      const payload: JwtPayload = this.jwtService.verifyAsync(token,
+        {
+          secret: process.env.JWT_REFRESH_SECRET,
+          // ignoreExpiration: false,
+        },
+      );
       request['refreshPayload'] = payload;
     } catch (error) {
-      throw error;
+      throw new UnauthorizedException('Invalid refresh token');
     }
 
     return true;
   }
 
   private extractTokenFromBody(request: Request): string | undefined {
-    return request.body?.['refresh_token'];
+    return request.body?.['refreshToken'];
   }
 }

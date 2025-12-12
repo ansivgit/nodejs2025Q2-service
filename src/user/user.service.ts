@@ -4,6 +4,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { v4 } from 'uuid';
+import { hash, compare } from 'bcrypt';
 
 import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
@@ -34,7 +35,12 @@ export class UserService {
     const { login, password } = createUserDto;
 
     const userInfo = { id: v4(), version: 1 };
-    const entity: User = new User({ login, password, ...userInfo });
+    const encryptedPassword: string = await hash(password, 10);
+    const entity: User = new User({
+      login,
+      password: encryptedPassword,
+      ...userInfo,
+    });
 
     const registeredUser: User = await this.userRepository.create(entity);
 
@@ -58,12 +64,15 @@ export class UserService {
     const { oldPassword, newPassword } = updateUserDto;
 
     const entity: User = await this.getEntity(id);
+    const isValid = await compare(oldPassword, entity.password);
 
-    if (entity.password !== oldPassword) {
+    if (!isValid) {
       throw new ForbiddenException('Incorrect password');
     }
 
-    entity.password = newPassword;
+    const encryptedNewPassword: string = await hash(newPassword, 10);
+
+    entity.password = encryptedNewPassword;
     entity.version += 1;
     entity.updatedAt = new Date();
 

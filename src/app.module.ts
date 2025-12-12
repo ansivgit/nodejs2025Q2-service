@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtAccessGuard } from './auth/guards/jwt-access.guard';
 import 'dotenv/config';
 
 import { AlbumModule } from './album/album.module';
@@ -35,11 +33,6 @@ import { UserModule } from './user/user.module';
     UserModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: JwtAccessGuard,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}
