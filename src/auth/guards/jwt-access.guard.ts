@@ -8,7 +8,11 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import type { JwtPayload } from 'jsonwebtoken';
 
-import { AUTH_ERROR_MESSAGES, IS_PUBLIC_KEY, TOKEN_TYPE } from '../../constants';
+import {
+  AUTH_ERROR_MESSAGES,
+  IS_PUBLIC_KEY,
+  TOKEN_TYPE,
+} from '../../constants';
 
 @Injectable()
 export class JwtAccessGuard implements CanActivate {
@@ -35,12 +39,10 @@ export class JwtAccessGuard implements CanActivate {
     }
 
     try {
-      const payload: JwtPayload = await this.jwtService.verifyAsync(token,
-        {
-          secret: process.env.JWT_ACCESS_SECRET,
-          // ignoreExpiration: false,
-        },
-      );
+      const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_ACCESS_SECRET,
+        // ignoreExpiration: false,
+      });
 
       request.token = payload;
     } catch (error) {

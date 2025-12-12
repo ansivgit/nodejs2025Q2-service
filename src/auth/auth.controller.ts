@@ -34,9 +34,7 @@ export class AuthController {
   @Public()
   @Post('login')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async login(
-    @Body() loginUserDto: LoginUserDto,
-  ): Promise<TokenResponse> {
+  async login(@Body() loginUserDto: LoginUserDto): Promise<TokenResponse> {
     return await this.authService.login(loginUserDto);
   }
 
@@ -44,7 +42,9 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   @UseGuards(JwtRefreshGuard)
-  async refresh(@Body() { refreshToken }: RefreshTokenDto): Promise<TokenResponse> {
+  async refresh(
+    @Body() { refreshToken }: RefreshTokenDto,
+  ): Promise<TokenResponse> {
     return await this.authService.refresh(refreshToken);
   }
 }

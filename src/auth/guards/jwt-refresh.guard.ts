@@ -24,12 +24,10 @@ export class JwtRefreshGuard implements CanActivate {
     }
 
     try {
-      const payload: JwtPayload = this.jwtService.verifyAsync(token,
-        {
-          secret: process.env.JWT_REFRESH_SECRET,
-          // ignoreExpiration: false,
-        },
-      );
+      const payload: JwtPayload = this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_REFRESH_SECRET,
+        // ignoreExpiration: false,
+      });
       request['refreshPayload'] = payload;
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');

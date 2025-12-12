@@ -16,7 +16,7 @@ import { APP_GUARD } from '@nestjs/core';
       signOptions: { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN },
     }),
     UserModule,
-],
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,

@@ -47,9 +47,7 @@ export class AuthService {
     return await this.userService.create(createUserDto);
   }
 
-  async login(
-    loginUserDto: LoginUserDto,
-  ): Promise<TokenResponse> {
+  async login(loginUserDto: LoginUserDto): Promise<TokenResponse> {
     const { login, password } = loginUserDto;
     const user: User | undefined = (await this.getExistingUsers(login))[0];
 
@@ -73,12 +71,12 @@ export class AuthService {
 
   async refresh(refreshToken: string): Promise<TokenResponse> {
     try {
-      const payload: JwtPayload =
-        await this.jwtService.verifyAsync(refreshToken,
-          {
-            secret: process.env.JWT_REFRESH_SECRET,
-          },
-        );
+      const payload: JwtPayload = await this.jwtService.verifyAsync(
+        refreshToken,
+        {
+          secret: process.env.JWT_REFRESH_SECRET,
+        },
+      );
 
       const user: Pick<User, 'id' | 'login'> = {
         id: payload.userId,
@@ -94,12 +92,10 @@ export class AuthService {
   async generateTokens(payload: JwtPayload): Promise<TokenResponse> {
     return {
       accessToken: await this.jwtService.signAsync(payload),
-      refreshToken: await this.jwtService.signAsync(payload,
-        {
-          expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
-          secret: process.env.JWT_REFRESH_SECRET,
-        }
-      ),
+      refreshToken: await this.jwtService.signAsync(payload, {
+        expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+        secret: process.env.JWT_REFRESH_SECRET,
+      }),
     };
   }
 }
