@@ -4,6 +4,7 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker - [Download & Install Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
 ## Downloading
 
@@ -14,12 +15,46 @@ git clone https://github.com/ansivgit/nodejs2025Q2-service.git
 ## Installing NPM modules
 
 ```
-git checkout develop
+git checkout docker-orm
 npm install
 ```
 
-## Running application
+## Pull docker image
+```
+docker pull ansiv/myapp:latest
+```
 
+## Check docker image size
+```
+docker images | grep myapp
+```
+
+## Build docker image
+```
+docker build -t ansiv/myapp:latest .
+```
+
+## Run docker image
+```
+docker compose up --build
+```
+
+## Scan docker image
+```
+docker scout quickview ansiv/myapp:latest
+```
+
+## Create docker container
+```
+docker-compose up -d
+```
+
+## Running migrations
+```
+docker-compose exec app npm run typeorm:run
+```
+
+## Running application (if stopped)
 ```
 npm start
 ```

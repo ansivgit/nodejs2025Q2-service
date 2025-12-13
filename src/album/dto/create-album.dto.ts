@@ -18,7 +18,7 @@ export class CreateAlbumDto {
   @ApiProperty()
   @IsInt()
   @Min(1900)
-  @Max(2024)
+  @Max(2025)
   year: number;
 
   @ApiProperty()

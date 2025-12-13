@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, NotContains } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
@@ -7,5 +7,6 @@ export class UpdateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  @NotContains(' ', { message: 'Password cannot contain spaces' })
   newPassword: string;
 }

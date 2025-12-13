@@ -1,4 +1,4 @@
-export interface User extends Record<string, string | number> {
+export interface UserResponse extends Record<string, string | number> {
   readonly id: string; // uuid v4
   login: string;
   password: string;
@@ -6,3 +6,5 @@ export interface User extends Record<string, string | number> {
   createdAt?: number; // timestamp of creation
   updatedAt?: number; // timestamp of last update
 }
+
+export type NewUser = Omit<UserResponse, 'createdAt' | 'updatedAt'>;

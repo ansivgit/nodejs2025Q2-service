@@ -8,6 +8,8 @@ import {
   Delete,
   HttpCode,
   ParseUUIDPipe,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 
 import { ArtistService } from './artist.service';
@@ -20,31 +22,33 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
-  create(@Body() createArtistDto: CreateArtistDto): Artist {
-    return this.artistService.create(createArtistDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async create(@Body() createArtistDto: CreateArtistDto): Promise<Artist> {
+    return await this.artistService.create(createArtistDto);
   }
 
   @Get()
-  findAll(): Artist[] {
-    return this.artistService.findAll();
+  async findAll(): Promise<Artist[]> {
+    return await this.artistService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Artist {
-    return this.artistService.findOne(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<Artist> {
+    return await this.artistService.getOneById(id);
   }
 
   @Put(':id')
-  update(
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
-  ): Artist {
-    return this.artistService.update(id, updateArtistDto);
+  ): Promise<Artist> {
+    return await this.artistService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string): void {
-    return this.artistService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return await this.artistService.remove(id);
   }
 }

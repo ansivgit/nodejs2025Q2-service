@@ -8,42 +8,51 @@ import {
   Delete,
   HttpCode,
   ParseUUIDPipe,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+
+import type { UserResponse } from './interfaces/user.interface';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Omit<User, 'password'> {
-    return this.userService.create(createUserDto);
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<Omit<UserResponse, 'password'>> {
+    return await this.userService.create(createUserDto);
   }
 
   @Get()
-  findAll(): Omit<User, 'password'>[] {
-    return this.userService.findAll();
+  async findAll(): Promise<Omit<UserResponse, 'password'>[]> {
+    return await this.userService.getAll();
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Omit<User, 'password'> {
-    return this.userService.findOne(id);
+  async findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<Omit<UserResponse, 'password'>> {
+    return await this.userService.getOneById(id);
   }
 
   @Put(':id')
-  update(
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Omit<User, 'password'> {
-    return this.userService.update(id, updateUserDto);
+  ): Promise<Omit<UserResponse, 'password'>> {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string): void {
-    return this.userService.remove(id);
+  async remove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    return await this.userService.remove(id);
   }
 }

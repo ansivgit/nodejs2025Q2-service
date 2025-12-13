@@ -6,7 +6,6 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
-import { Track } from '../entities/track.entity';
 
 export class CreateTrackDto {
   @ApiProperty()
@@ -30,8 +29,4 @@ export class CreateTrackDto {
   @IsInt()
   @IsNotEmpty()
   duration: number;
-
-  constructor(track: Track) {
-    Object.assign(this, track);
-  }
 }

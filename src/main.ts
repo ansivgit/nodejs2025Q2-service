@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
-// import 'dotenv/config';
+// import * as dotenv from 'dotenv';
+import 'dotenv/config';
 
 import { AppModule } from './app.module';
 import { getSwaggerDoc } from './utils';

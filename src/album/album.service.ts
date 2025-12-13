@@ -1,68 +1,58 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 } from 'uuid';
-import { DataBase } from 'src/db/db';
+
 import { Album } from './entities/album.entity';
+import { AlbumRepository } from './album.repository';
+
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { FavsService } from 'src/favs/favs.service';
 
 @Injectable()
 export class AlbumService {
-  constructor(
-    private readonly db: DataBase,
-    private readonly favsService: FavsService,
-  ) {}
+  constructor(private readonly albumRepository: AlbumRepository) {}
 
-  create(createAlbumDto: CreateAlbumDto): Album {
+  private async getEntity(id: string): Promise<Album> {
+    const entity: Album | null = await this.albumRepository.getOne(id);
+
+    if (!entity) {
+      throw new NotFoundException('Album not found');
+    }
+
+    return entity;
+  }
+
+  async create(createAlbumDto: CreateAlbumDto): Promise<Album> {
     const entity = new Album({ id: v4(), ...createAlbumDto });
 
     if (!createAlbumDto.artistId) {
       entity.artistId = null;
     }
 
-    this.db.albums.push(entity);
+    await this.albumRepository.create(entity);
     return entity;
   }
 
-  findAll(): Album[] | [] {
-    return this.db.albums;
+  async getAll(): Promise<Album[]> {
+    return await this.albumRepository.getAll();
   }
 
-  findOne(id: string): Album {
-    const entity: Album | undefined = this.db.albums.find(
-      (entity) => entity.id === id,
-    );
-
-    if (!entity) {
-      throw new NotFoundException('Item not found');
-    }
-
-    return entity;
+  async getOneById(id: string): Promise<Album> {
+    return await this.getEntity(id);
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto): Album {
-    const entity = this.findOne(id);
+  async update(id: string, updateAlbumDto: UpdateAlbumDto): Promise<Album> {
+    const entity: Album = await this.getEntity(id);
+
     Object.assign(entity, updateAlbumDto);
+    await this.albumRepository.update(entity);
 
     return entity;
   }
 
-  remove(id: string): void {
-    const entity = this.findOne(id);
+  async remove(id: string): Promise<void> {
+    await this.getEntity(id);
 
-    const entityIndex = this.db.albums.findIndex(
-      (item) => item.id === entity.id,
-    );
-
-    this.db.albums.splice(entityIndex, 1);
-
-    const albumTracks = this.db.tracks.filter(
-      (track) => track.albumId === entity.id,
-    );
-    albumTracks.forEach((track) => (track.albumId = null));
-
-    this.favsService.removeAlbum(id);
-
+    await this.albumRepository.remove(id);
     console.log(`This action removes a #${id} album`);
   }
 }
