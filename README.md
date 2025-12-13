@@ -11,6 +11,14 @@
 ```
 git clone https://github.com/ansivgit/nodejs2025Q2-service.git
 ```
+
+## Installing NPM modules
+
+```
+git checkout docker-orm
+npm install
+```
+
 ## Pull docker image
 ```
 docker pull ansiv/myapp:latest
@@ -31,29 +39,22 @@ docker build -t ansiv/myapp:latest .
 docker compose up --build
 ```
 
-## Installing NPM modules
-
+## Scan docker image
 ```
-git checkout develop
-npm install
+docker scout quickview ansiv/myapp:latest
 ```
 
 ## Create docker container
-
 ```
 docker-compose up -d
 ```
 
 ## Running migrations
-
 ```
-npm run typeorm:create
-npm run typeorm:generate
-npm run typeorm:run
+docker-compose exec app npm run typeorm:run
 ```
 
-## Running application
-
+## Running application (if stopped)
 ```
 npm start
 ```
