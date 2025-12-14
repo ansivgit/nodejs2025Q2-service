@@ -32,4 +32,12 @@ export class UserRepository {
   async remove(id: string): Promise<void> {
     await this.userTable.delete(id);
   }
+
+  async getOneByLogin(login: string): Promise<User[]> {
+    return await this.userTable.find({
+      where: {
+        login: login,
+      },
+    });
+  }
 }

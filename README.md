@@ -15,18 +15,13 @@ git clone https://github.com/ansivgit/nodejs2025Q2-service.git
 ## Installing NPM modules
 
 ```
-git checkout docker-orm
+git checkout logger-auth
 npm install
 ```
 
 ## Pull docker image
 ```
 docker pull ansiv/myapp:latest
-```
-
-## Check docker image size
-```
-docker images | grep myapp
 ```
 
 ## Build docker image
@@ -37,11 +32,6 @@ docker build -t ansiv/myapp:latest .
 ## Run docker image
 ```
 docker compose up --build
-```
-
-## Scan docker image
-```
-docker scout quickview ansiv/myapp:latest
 ```
 
 ## Create docker container
@@ -70,31 +60,20 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 ❗️ Please don't forget to run server (`npm run start:dev`) before running tests.
 After application running open new terminal and enter:
 
-To run all tests without authorization
 
-```
-npm run test
-```
-
-To run only one of all test suites
-
-```
-npm run test -- <path to suite>
-```
-
-To run all test with authorization
+### To run all test with authorization
 
 ```
 npm run test:auth
 ```
 
-To run only specific test suite with authorization
+### To run only specific test suite with authorization
 
 ```
 npm run test:auth -- <path to suite>
 ```
 
-### Auto-fix and format
+## Auto-fix and format
 
 ```
 npm run lint
@@ -109,3 +88,10 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+
+## Generate token
+
+```
+node -e "console.log('JWT_SECRET=' + require('crypto').randomBytes(64).toString('hex'))"
+```
