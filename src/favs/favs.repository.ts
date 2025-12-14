@@ -18,7 +18,13 @@ export class FavsRepository {
     });
 
     if (!favs) {
-      favs = this.favsTable.create({ id: 'singleton' });
+      // favs = this.favsTable.create({ id: 'singleton' });
+      favs = this.favsTable.create({
+        id: 'singleton',
+        albums: [],
+        artists: [],
+        tracks: [],
+      });
       favs = await this.favsTable.save(favs);
     }
 
