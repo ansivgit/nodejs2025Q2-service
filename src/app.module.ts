@@ -6,11 +6,19 @@ import { AlbumModule } from './album/album.module';
 import { ArtistModule } from './artist/artist.module';
 import { AuthModule } from './auth/auth.module';
 import { FavsModule } from './favs/favs.module';
+import { LoggerModule } from './common/logger/logger.module';
 import { TrackModule } from './track/track.module';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
+    LoggerModule.forRoot({
+      level: process.env.LOG_LEVEL || 'info',
+      filePath: process.env.LOG_FILE_PATH || 'logs/app.log',
+      console: process.env.LOG_CONSOLE !== 'false',
+      maxLogFileSize: parseInt(process.env.LOG_MAX_FILE_SIZE_KB) || 1024,
+      maxBackupFiles: parseInt(process.env.LOG_MAX_BACKUP_FILES) || 5,
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.NODE_ENV === 'development' ? 'localhost' : 'postgres',
